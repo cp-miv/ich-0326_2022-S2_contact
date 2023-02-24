@@ -1,0 +1,13 @@
+<form #contactForm="ngForm" (ngSubmit)="onSubmitForm(contactForm)">
+  <label for="firstname">Prénom</label>
+  <input type="text" name="firstname" id="firstname" [ngModel] />
+  <br />
+  <label for="lastname">Nom</label>
+  <input type="text" name="lastname" id="lastname" [ngModel] />
+  <br />
+  <label for="age">Age</label>
+  <input type="number" name="age" id="age" [ngModel] />
+  <br />
+  <a routerLink="/contacts">Annuler</a>
+  <button type="submit">Ajouter</button>
+</form>

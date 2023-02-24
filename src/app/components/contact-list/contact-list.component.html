@@ -1,0 +1,9 @@
+<h1>Liste des contacts</h1>
+<a routerLink="create">Ajouter</a>
+<div *ngFor="let contact of contacts">
+  <app-contact-list-item [contact]="contact"></app-contact-list-item>
+
+  <a routerLink="edit/{{ contact.id }}">Editer</a>
+  <br />
+  <a routerLink="remove/{{ contact.id }}">Supprimer</a>
+</div>
