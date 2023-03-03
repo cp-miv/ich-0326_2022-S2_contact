@@ -2,6 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContactEntity } from 'src/app/entities/contact.entity';
 import { ContactInMemoryService } from 'src/app/services/contact.inmemory.service';
+import { ContactLocalStorageService } from 'src/app/services/contact.localstorage.service';
+import { ContactService } from 'src/app/services/contact.service';
+import { ContactSessionStorageService } from 'src/app/services/contact.sessionstorage.service';
 
 @Component({
   selector: 'app-contact-edit',
@@ -12,7 +15,7 @@ export class ContactEditComponent implements OnInit {
   protected contact!: ContactEntity;
 
   constructor(
-    private contactService: ContactInMemoryService,
+    private contactService: ContactService,
     private router: Router,
     private route: ActivatedRoute
   ) {}

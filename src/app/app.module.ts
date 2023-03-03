@@ -9,6 +9,8 @@ import { ContactCreateComponent } from './components/contact-create/contact-crea
 import { FormsModule } from '@angular/forms';
 import { ContactEditComponent } from './components/contact-edit/contact-edit.component';
 import { ContactRemoveComponent } from './components/contact-remove/contact-remove.component';
+import { ContactLocalStorageService } from './services/contact.localstorage.service';
+import { ContactService } from './services/contact.service';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { ContactRemoveComponent } from './components/contact-remove/contact-remo
     ContactRemoveComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
-  providers: [],
+  providers: [
+    { provide: ContactService, useClass: ContactLocalStorageService },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
