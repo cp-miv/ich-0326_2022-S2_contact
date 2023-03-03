@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ContactEntity } from '../entities/contact.entity';
 import { ContactMapper } from '../mappers/contact.mapper';
 import { ContactModel } from '../models/contact.model';
+import { ContactService } from './contact.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,8 @@ export class ContactInMemoryService {
   protected contacts: ContactModel[];
 
   constructor(private mapper: ContactMapper) {
+    super();
+
     this.contacts = [
       new ContactModel({
         id: 1,
@@ -68,8 +71,8 @@ export class ContactInMemoryService {
     this.contacts[index] = model;
   }
 
-  public remove(model: ContactEntity): void {
-    let { index } = this.internalGet(model.id);
+  public remove(entity: ContactEntity): void {
+    let { index } = this.internalGet(entity.id);
 
     this.contacts.splice(index, 1);
   }
