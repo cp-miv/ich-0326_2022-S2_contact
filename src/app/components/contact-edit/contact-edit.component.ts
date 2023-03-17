@@ -28,6 +28,6 @@ export class ContactEditComponent implements OnInit {
   public onSubmitForm(): void {
     this.contactService.update(this.contact);
 
-    this.router.navigateByUrl('/contacts');
+    this.router.navigateByUrl('/contact');
   }
 }

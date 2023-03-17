@@ -28,6 +28,6 @@ export class ContactRemoveComponent implements OnInit {
   public onSubmitForm(): void {
     this.contactService.remove(this.contact);
 
-    this.router.navigateByUrl('/contacts');
+    this.router.navigateByUrl('/contact');
   }
 }

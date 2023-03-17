@@ -20,6 +20,6 @@ export class ContactCreateComponent {
 
     newContact = this.contactService.add(newContact);
 
-    this.router.navigateByUrl('/contacts');
+    this.router.navigateByUrl('/contact');
   }
 }

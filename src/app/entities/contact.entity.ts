@@ -1,5 +1,6 @@
-export class ContactEntity {
-  protected _id!: number;
+import { EntityBase } from './entity.base';
+
+export class ContactEntity extends EntityBase {
   protected _firstname!: string;
   protected _lastname!: string;
   protected _age!: number;
@@ -10,7 +11,8 @@ export class ContactEntity {
     lastname: string;
     age: number;
   }) {
-    this.id = params?.id ?? ContactEntity.DefaultID;
+    super({ id: params?.id });
+
     this.firstname = params?.firstname ?? ContactEntity.DefaultFirstname;
     this.lastname = params?.lastname ?? ContactEntity.DefaultLastname;
     this.age = params?.age ?? ContactEntity.DefaultAge;
@@ -27,16 +29,6 @@ export class ContactEntity {
   /**
    * Getters / Setters
    */
-
-  public get id(): number {
-    return this._id;
-  }
-
-  public set id(value: number) {
-    if (this._id !== undefined && this._id !== ContactEntity.DefaultID) return;
-
-    this._id = value;
-  }
 
   public get firstname(): string {
     return this._firstname;
@@ -68,7 +60,6 @@ export class ContactEntity {
    * Const / Static fields
    */
 
-  static readonly DefaultID: number = 0;
   static readonly DefaultFirstname: string = 'Prenom inconnu';
   static readonly DefaultLastname: string = 'Nom inconnu';
   static readonly DefaultAge: number = 0;

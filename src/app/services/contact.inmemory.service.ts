@@ -2,16 +2,19 @@ import { Injectable } from '@angular/core';
 import { ContactEntity } from '../entities/contact.entity';
 import { ContactMapper } from '../mappers/contact.mapper';
 import { ContactModel } from '../models/contact.model';
-import { ContactService } from './contact.service';
+import { InMemoryService } from './inmemory.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContactInMemoryService {
+export class ContactInMemoryService extends InMemoryService<
+  ContactEntity,
+  ContactModel
+> {
   protected contacts: ContactModel[];
 
-  constructor(private mapper: ContactMapper) {
-    super();
+  constructor(mapper: MapperBase<ContactEntity, ContactModel>) {
+    super(mapper);
 
     this.contacts = [
       new ContactModel({
@@ -39,56 +42,5 @@ export class ContactInMemoryService {
         ageContact: 54,
       }),
     ];
-  }
-
-  public getAll(): ContactEntity[] {
-    return this.contacts.map(this.mapper.mapFromModel);
-  }
-
-  public get(id: number): ContactEntity {
-    const { model } = this.internalGet(id);
-
-    return this.mapper.mapFromModel(model);
-  }
-
-  public add(entity: ContactEntity): ContactEntity {
-    const id: number = Math.max(0, ...this.contacts.map((x) => x.id!)) + 1;
-
-    const model: ContactModel = this.mapper.mapFromEntity(entity);
-    model.id = id;
-    this.contacts.push(model);
-
-    return this.mapper.mapFromModel(model);
-  }
-
-  public update(entity: ContactEntity): void {
-    const { index, model } = this.internalGet(entity.id);
-
-    model.firstnameContact = entity.firstname;
-    model.lastnameContact = entity.lastname;
-    model.ageContact = entity.age;
-
-    this.contacts[index] = model;
-  }
-
-  public remove(entity: ContactEntity): void {
-    let { index } = this.internalGet(entity.id);
-
-    this.contacts.splice(index, 1);
-  }
-
-  protected internalGet(id: number): {
-    index: number;
-    model: ContactModel;
-  } {
-    const index: number = this.contacts.findIndex((x) => x.id === id);
-
-    if (index === -1) {
-      throw new Error(`Impossible de trouver un model avec l'ID '${id}'`);
-    }
-
-    const model: ContactModel = this.contacts[index];
-
-    return { index: index, model: model };
   }
 }

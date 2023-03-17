@@ -1,5 +1,6 @@
-export class ContactModel {
-  public id?: number;
+import { ModelBase } from './model.base';
+
+export class ContactModel extends ModelBase {
   public firstnameContact: string;
   public lastnameContact: string;
   public ageContact: number;
@@ -10,7 +11,8 @@ export class ContactModel {
     lastnameContact: string;
     ageContact: number;
   }) {
-    this.id = params?.id;
+    super({ id: params?.id });
+
     this.firstnameContact = params.firstnameContact;
     this.lastnameContact = params.lastnameContact;
     this.ageContact = params.ageContact;

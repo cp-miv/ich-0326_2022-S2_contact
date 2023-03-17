@@ -6,10 +6,10 @@ import { ContactListComponent } from './components/contact-list/contact-list.com
 import { ContactRemoveComponent } from './components/contact-remove/contact-remove.component';
 
 const routes: Routes = [
-  { path: 'contacts/remove/:id', component: ContactRemoveComponent },
-  { path: 'contacts/edit/:id', component: ContactEditComponent },
-  { path: 'contacts/create', component: ContactCreateComponent },
-  { path: 'contacts', component: ContactListComponent },
+  { path: 'contact/remove/:id', component: ContactRemoveComponent },
+  { path: 'contact/edit/:id', component: ContactEditComponent },
+  { path: 'contact/create', component: ContactCreateComponent },
+  { path: 'contact', component: ContactListComponent },
 ];
 
 @NgModule({
