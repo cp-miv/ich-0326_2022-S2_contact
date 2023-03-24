@@ -2,14 +2,14 @@ import { EntityBase } from '../entities/entity.base';
 import { MapperBase } from '../mappers/mapper.base';
 import { ModelBase } from '../models/model.base';
 
-export class LocalStorageService<
+export class BrowserStorageService<
   TEntity extends EntityBase,
   TModel extends ModelBase
 > {
   protected storage: Storage;
 
-  constructor(private mapper: MapperBase<TEntity, TModel>) {
-    this.storage = window.localStorage;
+  constructor(storage: Storage, private mapper: MapperBase<TEntity, TModel>) {
+    this.storage = storage;
   }
 
   public getAll(): TEntity[] {
