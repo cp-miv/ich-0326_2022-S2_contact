@@ -3,16 +3,16 @@ import { Injectable } from '@angular/core';
 import { AddressEntity } from '../entities/address.entity';
 import { MapperBase } from '../mappers/mapper.base';
 import { AddressModel } from '../models/address.model';
-import { LocalStorageService } from './localstorage.service';
+import { BrowserStorageService } from './browserstorage.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AddressLocalStorageService extends LocalStorageService<
+export class AddressLocalStorageService extends BrowserStorageService<
   AddressEntity,
   AddressModel
 > {
   constructor(mapper: MapperBase<AddressEntity, AddressModel>) {
-    super(mapper);
+    super(mapper, window.localStorage);
   }
 }

@@ -5,16 +5,16 @@ import { ContactMapper } from '../mappers/contact.mapper';
 import { MapperBase } from '../mappers/mapper.base';
 import { ContactModel } from '../models/contact.model';
 import { ContactService } from './contact.service';
-import { LocalStorageService } from './localstorage.service';
+import { BrowserStorageService } from './browserstorage.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContactLocalStorageService extends LocalStorageService<
+export class ContactLocalStorageService extends BrowserStorageService<
   ContactEntity,
   ContactModel
 > {
   constructor(mapper: MapperBase<ContactEntity, ContactModel>) {
-    super(mapper);
+    super(mapper, window.localStorage);
   }
 }

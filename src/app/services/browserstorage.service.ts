@@ -6,14 +6,18 @@ export class LocalStorageService<
   TEntity extends EntityBase,
   TModel extends ModelBase
 > {
-  constructor(private mapper: MapperBase<TEntity, TModel>) {}
+  protected storage: Storage;
+
+  constructor(private mapper: MapperBase<TEntity, TModel>) {
+    this.storage = window.localStorage;
+  }
 
   public getAll(): TEntity[] {
     const models: TModel[] = [];
 
-    for (let key in localStorage) {
-      if (localStorage.hasOwnProperty(key) && key.match(/Address_\d+/gi)) {
-        const modelString: string = localStorage.getItem(key)!;
+    for (let key in this.storage) {
+      if (this.storage.hasOwnProperty(key) && key.match(/Address_\d+/gi)) {
+        const modelString: string = this.storage.getItem(key)!;
         const model: TModel = JSON.parse(modelString);
         models.push(model);
       }
@@ -23,7 +27,7 @@ export class LocalStorageService<
   }
 
   public get(id: number): TEntity {
-    const modelString: string | null = localStorage.getItem(`Address_${id}`);
+    const modelString: string | null = this.storage.getItem(`Address_${id}`);
 
     if (modelString === null) {
       throw new Error(`Impossible d'obtenir un Address avec l'ID '${id}'`);
@@ -41,13 +45,13 @@ export class LocalStorageService<
     model.id = id;
 
     const modelString = JSON.stringify(model);
-    localStorage.setItem(`Address_${id}`, modelString);
+    this.storage.setItem(`Address_${id}`, modelString);
 
     return this.mapper.mapFromModel(model);
   }
 
   public update(entity: TEntity): void {
-    let modelString: string | null = localStorage.getItem(
+    let modelString: string | null = this.storage.getItem(
       `Address_${entity.id}`
     );
 
@@ -62,10 +66,10 @@ export class LocalStorageService<
     this.mapper.assignFromEntity(entity, model);
 
     modelString = JSON.stringify(model);
-    localStorage.setItem(`Address_${model.id}`, modelString);
+    this.storage.setItem(`Address_${model.id}`, modelString);
   }
 
   public remove(entity: TEntity): void {
-    localStorage.removeItem(`Address_${entity.id}`);
+    this.storage.removeItem(`Address_${entity.id}`);
   }
 }

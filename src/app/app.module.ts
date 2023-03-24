@@ -11,6 +11,10 @@ import { ContactEditComponent } from './components/contact-edit/contact-edit.com
 import { ContactRemoveComponent } from './components/contact-remove/contact-remove.component';
 import { ContactLocalStorageService } from './services/contact.localstorage.service';
 import { ContactService } from './services/contact.service';
+import { StorageHelper } from './helpers/storage.helper';
+import { ContactEntity } from './entities/contact.entity';
+import { ContactModel } from './models/contact.model';
+import { AddressModel } from './models/address.model';
 
 @NgModule({
   declarations: [
@@ -27,4 +31,17 @@ import { ContactService } from './services/contact.service';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    // let storageHelper = new StorageHelper<ContactEntity>(
+    //   window.sessionStorage,
+    //   'Contact_',
+    //   (x) => x.id
+    // );
+    // let myContact: ContactEntity = storageHelper.getItem(34)!;
+    // myContact.age = 18;
+    // storageHelper.setItem(myContact);
+    // let contacts: ContactEntity[] = storageHelper.getItems();
+    // storageHelper.removeAll();
+  }
+}

@@ -1,4 +1,3 @@
-import { JsonPipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { ContactEntity } from '../entities/contact.entity';
 import { ContactMapper } from '../mappers/contact.mapper';
