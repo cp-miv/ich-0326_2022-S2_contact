@@ -1,5 +1,3 @@
-import { ContactModel } from '../models/contact.model';
-
 export class StorageHelper<T> {
   constructor(
     private backend: Storage,
@@ -7,42 +5,61 @@ export class StorageHelper<T> {
     private idProvider: (x: T) => number
   ) {}
 
-  /*
-   * Return a list of all items manager by this helper.
-   */
-  public getItems(): T[] {
-    const items: T[] = [];
+  public getItems(id: string = '\\d+'): T[] {
+    const pattern = this.computeKey(id);
+    const regex = new RegExp(pattern, 'gi');
+    const models: T[] = [];
 
     for (let key in this.backend) {
-      if (this.backend.hasOwnProperty(key) && key.match(/Address_\d+/gi)) {
-        const itemString: string = this.backend.getItem(key)!;
-        const item: T = JSON.parse(itemString);
-        items.push(item);
+      if (this.backend.hasOwnProperty(key) && key.match(regex)) {
+        const item: string = this.backend.getItem(key)!;
+        const model: T = this.deserialize(item);
+        models.push(model);
       }
     }
 
-    return items;
+    models.sort((a, b) => this.idProvider(a) - this.idProvider(b));
+
+    return models;
   }
 
-  public getItem(id: number): T | undefined {
-    return this.getItems().find((x) => this.idProvider(x) === id);
+  public getItem(id: string): T {
+    const models: T[] = this.getItems(id);
+
+    if (models.length === 0) {
+      throw new Error(`Impossible de trouver un model avec l'ID '${id}'`);
+    }
+
+    return models[0];
   }
 
-  public setItem(item: T): void {
-    const id: number = this.idProvider(item);
-    const key: string = `${this.keyPrefix}${id}`;
-    const value: string = JSON.stringify(item);
-
+  public setItem(model: T): void {
+    const id: number = this.idProvider(model);
+    const key: string = this.computeKey(id.toString());
+    const value: string = this.serialize(model);
     this.backend.setItem(key, value);
   }
 
-  public removeItem(item: { id?: number }): void {
-    if (item.id === undefined) {
-      throw new Error('Unable to call removeItem with undefined id');
-    }
+  public removeItem(model: T): void {
+    const id: number = this.idProvider(model);
+    const key = this.computeKey(id.toString());
+    this.backend.removeItem(key);
   }
 
-  public removeAll(): void {
-    throw new Error('Not implemented');
+  public clear(): void {
+    const models: T[] = this.getItems();
+    models.forEach(this.removeItem);
+  }
+
+  protected computeKey(id: string): string {
+    return `${this.keyPrefix}${id}`;
+  }
+
+  protected serialize(model: T): string {
+    return JSON.stringify(model);
+  }
+
+  protected deserialize(value: string): T {
+    return JSON.parse(value);
   }
 }

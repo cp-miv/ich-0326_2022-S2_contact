@@ -1,6 +1,7 @@
 import { EntityBase } from '../entities/entity.base';
 import { MapperBase } from '../mappers/mapper.base';
 import { ModelBase } from '../models/model.base';
+import { RepositoryBase } from '../repositories/repository.base';
 
 export class InMemoryService<
   TEntity extends EntityBase,
