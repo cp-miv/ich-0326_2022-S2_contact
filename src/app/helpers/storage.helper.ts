@@ -5,26 +5,13 @@ export class StorageHelper<T> {
     private idProvider: (x: T) => number
   ) {}
 
-  public getItems(id: string = '\\d+'): T[] {
-    const pattern = this.computeKey(id);
-    const regex = new RegExp(pattern, 'gi');
-    const models: T[] = [];
-
-    for (let key in this.backend) {
-      if (this.backend.hasOwnProperty(key) && key.match(regex)) {
-        const item: string = this.backend.getItem(key)!;
-        const model: T = this.deserialize(item);
-        models.push(model);
-      }
-    }
-
-    models.sort((a, b) => this.idProvider(a) - this.idProvider(b));
-
-    return models;
+  public getItems(): T[] {
+    // Using Regex : \d+ indicates all number
+    return this.internalGetItems('\\d+');
   }
 
   public getItem(id: string): T {
-    const models: T[] = this.getItems(id);
+    const models: T[] = this.internalGetItems(id);
 
     if (models.length === 0) {
       throw new Error(`Impossible de trouver un model avec l'ID '${id}'`);
@@ -42,7 +29,7 @@ export class StorageHelper<T> {
 
   public removeItem(model: T): void {
     const id: number = this.idProvider(model);
-    const key = this.computeKey(id.toString());
+    const key: string = this.computeKey(id.toString());
     this.backend.removeItem(key);
   }
 
@@ -61,5 +48,23 @@ export class StorageHelper<T> {
 
   protected deserialize(value: string): T {
     return JSON.parse(value);
+  }
+
+  protected internalGetItems(idPattern: string): T[] {
+    const pattern: string = this.computeKey(idPattern);
+    const regex: RegExp = new RegExp(pattern, 'gi');
+    const models: T[] = [];
+
+    for (let key in this.backend) {
+      if (this.backend.hasOwnProperty(key) && key.match(regex)) {
+        const item: string = this.backend.getItem(key)!;
+        const model: T = this.deserialize(item);
+        models.push(model);
+      }
+    }
+
+    models.sort((a, b) => this.idProvider(a) - this.idProvider(b));
+
+    return models;
   }
 }
