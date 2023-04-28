@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AddressEntity } from '../entities/address.entity';
-import { EntityBase } from '../entities/entity.base';
 import { AddressModel } from '../models/address.model';
-import { ModelBase } from '../models/model.base';
-import { MapperBase } from './mapper.base';
+import { IMapper } from './imapper';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AddressMapper extends MapperBase<AddressEntity, AddressModel> {
+export class AddressMapper extends IMapper<AddressEntity, AddressModel> {
   public assignFromEntity(entity: AddressEntity, model: AddressModel): void {
     model.streetAddress = entity.street;
     model.numberAddress = entity.number;

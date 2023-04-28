@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ContactEntity } from '../entities/contact.entity';
 import { ContactModel } from '../models/contact.model';
-import { MapperBase } from './mapper.base';
+import { IMapper } from './imapper';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContactMapper extends MapperBase<ContactEntity, ContactModel> {
+export class ContactMapper extends IMapper<ContactEntity, ContactModel> {
   public assignFromEntity(entity: ContactEntity, model: ContactModel): void {
     model.firstnameContact = entity.firstname;
     model.lastnameContact = entity.lastname;

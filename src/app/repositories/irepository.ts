@@ -1,6 +1,6 @@
 import { ModelBase } from '../models/model.base';
 
-export abstract class RepositoryBase<TModel extends ModelBase> {
+export abstract class IRepository<TModel extends ModelBase> {
   public abstract getAll(): TModel[];
   public abstract get(id: number): TModel;
   public abstract add(model: TModel): TModel;

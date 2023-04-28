@@ -1,10 +1,10 @@
 import { StorageHelper } from '../helpers/storage.helper';
 import { ModelBase } from '../models/model.base';
-import { RepositoryBase } from './repository.base';
+import { IRepository } from './irepository';
 
 export class BrowserStorageRepository<
   TModel extends ModelBase
-> extends RepositoryBase<TModel> {
+> extends IRepository<TModel> {
   protected storage: StorageHelper<TModel>;
 
   constructor(storage: Storage, className: string) {

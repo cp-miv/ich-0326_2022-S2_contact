@@ -1,7 +1,7 @@
 import { EntityBase } from '../entities/entity.base';
 import { ModelBase } from '../models/model.base';
 
-export abstract class MapperBase<
+export abstract class IMapper<
   TEntity extends EntityBase,
   TModel extends ModelBase
 > {

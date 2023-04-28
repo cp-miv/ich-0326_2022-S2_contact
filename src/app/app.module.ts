@@ -40,7 +40,7 @@ export class AppModule {
     // );
     // let myContact: ContactEntity = storageHelper.getItem(34)!;
     // myContact.age = 18;
-    // storageHelper.setItem(myContact);
+    // storageHelper.setItem(myContact);\401\en\Course_backup
     // let contacts: ContactEntity[] = storageHelper.getItems();
     // storageHelper.removeAll();
   }
