@@ -1,11 +1,8 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { IService } from 'src/app/services/iservice';
 import { ContactEntity } from 'src/app/entities/contact.entity';
-import { ContactInMemoryService } from 'src/app/services/contact.inmemory.service';
-import { ContactLocalStorageService } from 'src/app/services/contact.localstorage.service';
-import { ContactService } from 'src/app/services/contact.service';
-import { ContactSessionStorageService } from 'src/app/services/contact.sessionstorage.service';
 
 @Component({
   selector: 'app-contact-create',
@@ -13,7 +10,10 @@ import { ContactSessionStorageService } from 'src/app/services/contact.sessionst
   styleUrls: ['./contact-create.component.scss'],
 })
 export class ContactCreateComponent {
-  constructor(private contactService: ContactService, private router: Router) {}
+  constructor(
+    private contactService: IService<ContactEntity>,
+    private router: Router
+  ) {}
 
   public onSubmitForm(contactForm: NgForm): void {
     let newContact: ContactEntity = new ContactEntity(contactForm.value);

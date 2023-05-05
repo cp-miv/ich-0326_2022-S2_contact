@@ -2,7 +2,7 @@ import { EntityBase } from '../entities/entity.base';
 import { IMapper } from '../mappers/imapper';
 import { ModelBase } from '../models/model.base';
 import { IRepository } from '../repositories/irepository';
-import { IService } from './IService';
+import { IService } from './iservice';
 
 export abstract class ServiceBase<
   TEntity extends EntityBase,

@@ -9,12 +9,20 @@ import { ContactCreateComponent } from './components/contact-create/contact-crea
 import { FormsModule } from '@angular/forms';
 import { ContactEditComponent } from './components/contact-edit/contact-edit.component';
 import { ContactRemoveComponent } from './components/contact-remove/contact-remove.component';
-import { ContactLocalStorageService } from './services/contact.localstorage.service';
 import { ContactService } from './services/contact.service';
-import { StorageHelper } from './helpers/storage.helper';
 import { ContactEntity } from './entities/contact.entity';
 import { ContactModel } from './models/contact.model';
 import { AddressModel } from './models/address.model';
+import { IService } from './services/iservice';
+import { AddressEntity } from './entities/address.entity';
+import { AddressService } from './services/address.service';
+import { IMapper } from './mappers/imapper';
+import { AddressMapper } from './mappers/address.mapper';
+import { ContactMapper } from './mappers/contact.mapper';
+import { IRepository } from './repositories/irepository';
+import { BrowserStorageRepository } from './repositories/browserstorage.repository';
+
+const browserStorageType: Storage = window.sessionStorage;
 
 @NgModule({
   declarations: [
@@ -27,21 +35,33 @@ import { AddressModel } from './models/address.model';
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [
-    { provide: ContactService, useClass: ContactLocalStorageService },
+    { provide: IService<AddressEntity>, useClass: AddressService },
+    { provide: IService<ContactEntity>, useClass: ContactService },
+
+    { provide: IMapper<AddressEntity, AddressModel>, useClass: AddressMapper },
+    { provide: IMapper<ContactEntity, ContactModel>, useClass: ContactMapper },
+
+    {
+      provide: IRepository<AddressModel>,
+      useFactory: () => {
+        return new BrowserStorageRepository<AddressModel>(
+          browserStorageType,
+          'address'
+        );
+      },
+    },
+    {
+      provide: IRepository<ContactModel>,
+      useFactory: () => {
+        return new BrowserStorageRepository<ContactModel>(
+          browserStorageType,
+          'contact'
+        );
+      },
+    },
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor() {
-    // let storageHelper = new StorageHelper<ContactEntity>(
-    //   window.sessionStorage,
-    //   'Contact_',
-    //   (x) => x.id
-    // );
-    // let myContact: ContactEntity = storageHelper.getItem(34)!;
-    // myContact.age = 18;
-    // storageHelper.setItem(myContact);\401\en\Course_backup
-    // let contacts: ContactEntity[] = storageHelper.getItems();
-    // storageHelper.removeAll();
-  }
+  constructor() {}
 }
