@@ -21,6 +21,7 @@ import { AddressMapper } from './mappers/address.mapper';
 import { ContactMapper } from './mappers/contact.mapper';
 import { IRepository } from './repositories/irepository';
 import { BrowserStorageRepository } from './repositories/browserstorage.repository';
+import { DelayedBrowserStorageRepository } from './repositories/delayedbrowserstorage.repository';
 
 const browserStorageType: Storage = window.sessionStorage;
 
@@ -44,18 +45,20 @@ const browserStorageType: Storage = window.sessionStorage;
     {
       provide: IRepository<AddressModel>,
       useFactory: () => {
-        return new BrowserStorageRepository<AddressModel>(
+        return new DelayedBrowserStorageRepository<AddressModel>(
           browserStorageType,
-          'address'
+          'address',
+          2000
         );
       },
     },
     {
       provide: IRepository<ContactModel>,
       useFactory: () => {
-        return new BrowserStorageRepository<ContactModel>(
+        return new DelayedBrowserStorageRepository<ContactModel>(
           browserStorageType,
-          'contact'
+          'contact',
+          2000
         );
       },
     },
