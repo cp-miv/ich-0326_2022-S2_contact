@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, tap } from 'rxjs';
 import { ContactEntity } from 'src/app/entities/contact.entity';
-import { ContactInMemoryService } from 'src/app/services/contact.inmemory.service';
-import { ContactLocalStorageService } from 'src/app/services/contact.localstorage.service';
-import { ContactService } from 'src/app/services/contact.service';
-import { ContactSessionStorageService } from 'src/app/services/contact.sessionstorage.service';
+import { IService } from 'src/app/services/iservice';
 
 @Component({
   selector: 'app-contact-remove',
@@ -12,22 +10,26 @@ import { ContactSessionStorageService } from 'src/app/services/contact.sessionst
   styleUrls: ['./contact-remove.component.scss'],
 })
 export class ContactRemoveComponent implements OnInit {
-  protected contact!: ContactEntity;
+  protected contact$!: Observable<ContactEntity>;
+  private contact!: ContactEntity;
 
   constructor(
-    private contactService: ContactService,
+    private contactService: IService<ContactEntity>,
     private router: Router,
     private route: ActivatedRoute
   ) {}
 
   public ngOnInit(): void {
     const id: number = +this.route.snapshot.params['id'];
-    this.contact = this.contactService.get(id);
+    this.contact$ = this.contactService
+      .get(id)
+      .pipe(tap((contact) => (this.contact = contact)));
   }
 
   public onSubmitForm(): void {
-    this.contactService.remove(this.contact);
-
-    this.router.navigateByUrl('/contact');
+    this.contactService
+      .remove(this.contact)
+      .pipe(tap(() => this.router.navigateByUrl('/contact')))
+      .subscribe();
   }
 }

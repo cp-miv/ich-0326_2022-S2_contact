@@ -1,5 +1,7 @@
+import { Observable, of } from 'rxjs';
 import { ModelBase } from '../models/model.base';
 import { IRepository } from './irepository';
+import { ObservableHelper } from '../helpers/observable.helper';
 
 class InMemoryRepository<TModel extends ModelBase> extends IRepository<TModel> {
   protected models: TModel[];
@@ -9,35 +11,39 @@ class InMemoryRepository<TModel extends ModelBase> extends IRepository<TModel> {
     this.models = [];
   }
 
-  public override getAll(): TModel[] {
-    return this.models;
+  public override getAll(): Observable<TModel[]> {
+    return of(this.models);
   }
 
-  public override get(id: number): TModel {
+  public override get(id: number): Observable<TModel> {
     const { model } = this.internalGet(id);
 
-    return model;
+    return of(model);
   }
 
-  public override add(model: TModel): TModel {
+  public override add(model: TModel): Observable<TModel> {
     const id: number = Math.max(0, ...this.models.map((x) => x.id!)) + 1;
     model.id = id;
 
     this.models.push(model);
 
-    return model;
+    return of(model);
   }
 
-  public override update(model: TModel): void {
+  public override update(model: TModel): Observable<void> {
     const { index } = this.internalGet(model.id);
 
     this.models[index] = model;
+
+    return ObservableHelper.void();
   }
 
-  public override remove(model: TModel): void {
+  public override remove(model: TModel): Observable<void> {
     const { index } = this.internalGet(model.id);
 
     this.models.splice(index, 1);
+
+    return ObservableHelper.void();
   }
 
   protected internalGet(id: number | undefined): {

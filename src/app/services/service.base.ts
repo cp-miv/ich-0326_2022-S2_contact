@@ -1,8 +1,9 @@
+import { Observable, from, map, of, switchMap } from 'rxjs';
 import { EntityBase } from '../entities/entity.base';
 import { IMapper } from '../mappers/imapper';
 import { ModelBase } from '../models/model.base';
 import { IRepository } from '../repositories/irepository';
-import { IService } from './IService';
+import { IService } from './iservice';
 
 export abstract class ServiceBase<
   TEntity extends EntityBase,
@@ -15,30 +16,36 @@ export abstract class ServiceBase<
     super();
   }
 
-  public getAll(): TEntity[] {
-    return this.repository.getAll().map((x) => this.mapper.mapFromModel(x));
+  public getAll(): Observable<TEntity[]> {
+    const models$: Observable<TModel[]> = this.repository.getAll();
+
+    return models$.pipe(
+      map((models: TModel[]) => {
+        return models.map((model: TModel) => this.mapper.mapFromModel(model));
+      })
+    );
   }
 
-  public get(id: number): TEntity {
-    const model: TModel = this.repository.get(id);
+  public get(id: number): Observable<TEntity> {
+    const model$: Observable<TModel> = this.repository.get(id);
 
-    return this.mapper.mapFromModel(model);
+    return model$.pipe(map((x) => this.mapper.mapFromModel(x)));
   }
 
-  public add(entity: TEntity): TEntity {
-    let model: TModel = this.mapper.mapFromEntity(entity);
-    model = this.repository.add(model);
-
-    return this.mapper.mapFromModel(model);
-  }
-
-  public update(entity: TEntity): void {
+  public add(entity: TEntity): Observable<TEntity> {
     const model: TModel = this.mapper.mapFromEntity(entity);
-    this.repository.update(model);
+    const model$: Observable<TModel> = this.repository.add(model);
+
+    return model$.pipe(map((x) => this.mapper.mapFromModel(x)));
   }
 
-  public remove(entity: TEntity): void {
+  public update(entity: TEntity): Observable<void> {
     const model: TModel = this.mapper.mapFromEntity(entity);
-    this.repository.remove(model);
+    return this.repository.update(model);
+  }
+
+  public remove(entity: TEntity): Observable<void> {
+    const model: TModel = this.mapper.mapFromEntity(entity);
+    return this.repository.remove(model);
   }
 }

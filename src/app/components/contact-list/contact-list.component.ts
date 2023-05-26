@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ContactInMemoryService } from 'src/app/services/contact.inmemory.service';
-import { ContactLocalStorageService } from 'src/app/services/contact.localstorage.service';
-import { ContactService } from 'src/app/services/contact.service';
-import { ContactSessionStorageService } from 'src/app/services/contact.sessionstorage.service';
+import { Observable } from 'rxjs';
+import { IService } from 'src/app/services/iservice';
 import { ContactEntity } from '../../entities/contact.entity';
 
 @Component({
@@ -11,11 +9,11 @@ import { ContactEntity } from '../../entities/contact.entity';
   styleUrls: ['./contact-list.component.scss'],
 })
 export class ContactListComponent implements OnInit {
-  protected contacts!: ContactEntity[];
+  protected contacts$!: Observable<ContactEntity[]>;
 
-  constructor(private contactService: ContactService) {}
+  constructor(private contactService: IService<ContactEntity>) {}
 
   ngOnInit(): void {
-    this.contacts = this.contactService.getAll();
+    this.contacts$ = this.contactService.getAll();
   }
 }

@@ -1,6 +1,8 @@
+import { ObservableHelper } from '../helpers/observable.helper';
 import { StorageHelper } from '../helpers/storage.helper';
 import { ModelBase } from '../models/model.base';
 import { IRepository } from './irepository';
+import { Observable, from, map, of } from 'rxjs';
 
 export class BrowserStorageRepository<
   TModel extends ModelBase
@@ -17,29 +19,34 @@ export class BrowserStorageRepository<
     );
   }
 
-  public getAll(): TModel[] {
-    return this.storage.getItems();
+  public override getAll(): Observable<TModel[]> {
+    return of(this.storage.getItems());
   }
 
-  public get(id: number): TModel {
-    return this.storage.getItem(id.toString());
+  public override get(id: number): Observable<TModel> {
+    return of(this.storage.getItem(id.toString()));
   }
 
-  public add(model: TModel): TModel {
-    const id: number = Math.max(0, ...this.getAll().map((x) => x.id!)) + 1;
+  public override add(model: TModel): Observable<TModel> {
+    const items: TModel[] = this.storage.getItems();
+    const id: number = Math.max(0, ...items.map((x) => x.id!)) + 1;
 
     model.id = id;
 
     this.storage.setItem(model);
 
-    return model;
+    return of(model);
   }
 
-  public update(model: TModel): void {
+  public override update(model: TModel): Observable<void> {
     this.storage.setItem(model);
+
+    return ObservableHelper.void();
   }
 
-  public remove(model: TModel): void {
+  public override remove(model: TModel): Observable<void> {
     this.storage.removeItem(model);
+
+    return ObservableHelper.void();
   }
 }

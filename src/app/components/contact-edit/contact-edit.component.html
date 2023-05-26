@@ -1,4 +1,8 @@
-<form (ngSubmit)="onSubmitForm()">
+<h1>Edition d'un contact</h1>
+<form
+  (ngSubmit)="onSubmitForm()"
+  *ngIf="contact$ | async as contact; else templateloader"
+>
   <label for="firstname">Prénom</label>
   <input
     type="text"
@@ -21,3 +25,6 @@
   <a routerLink="/contact">Annuler</a>
   <button type="submit">Sauver</button>
 </form>
+<ng-template #templateloader>
+  <app-loader />
+</ng-template>

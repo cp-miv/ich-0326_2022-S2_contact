@@ -6,7 +6,7 @@ export class StorageHelper<T> {
   ) {}
 
   public getItems(): T[] {
-    // Using Regex : \d+ indicates all number
+    // Using Regex : \d+ indicates all numbers
     return this.internalGetItems('\\d+');
   }
 

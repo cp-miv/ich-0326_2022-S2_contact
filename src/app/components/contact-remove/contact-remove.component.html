@@ -1,6 +1,13 @@
-<form (ngSubmit)="onSubmitForm()">
+<h1>Suppression d'un contact</h1>
+<form
+  (ngSubmit)="onSubmitForm()"
+  *ngIf="contact$ | async as contact; else templateloader"
+>
   <app-contact-list-item [contact]="contact"></app-contact-list-item>
 
   <a routerLink="/contact">Annuler</a>
   <button type="submit">Supprimer</button>
 </form>
+<ng-template #templateloader>
+  <app-loader />
+</ng-template>
