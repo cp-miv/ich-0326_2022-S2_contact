@@ -38,15 +38,15 @@ export class BrowserStorageRepository<
     return of(model);
   }
 
-  public override update(model: TModel): Observable<void> {
+  public override update(model: TModel): Observable<TModel> {
     this.storage.setItem(model);
 
-    return ObservableHelper.void();
+    return of(model);
   }
 
-  public override remove(model: TModel): Observable<void> {
+  public override remove(model: TModel): Observable<TModel> {
     this.storage.removeItem(model);
 
-    return ObservableHelper.void();
+    return of(model);
   }
 }

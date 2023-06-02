@@ -39,13 +39,19 @@ export abstract class ServiceBase<
     return model$.pipe(map((x) => this.mapper.mapFromModel(x)));
   }
 
-  public update(entity: TEntity): Observable<void> {
+  public update(entity: TEntity): Observable<TEntity> {
     const model: TModel = this.mapper.mapFromEntity(entity);
-    return this.repository.update(model);
+
+    return this.repository
+      .update(model)
+      .pipe(map((x) => this.mapper.mapFromModel(x)));
   }
 
-  public remove(entity: TEntity): Observable<void> {
+  public remove(entity: TEntity): Observable<TEntity> {
     const model: TModel = this.mapper.mapFromEntity(entity);
-    return this.repository.remove(model);
+
+    return this.repository
+      .remove(model)
+      .pipe(map((x) => this.mapper.mapFromModel(x)));
   }
 }

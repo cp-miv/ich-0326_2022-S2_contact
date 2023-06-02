@@ -3,7 +3,9 @@ import { ModelBase } from '../models/model.base';
 import { IRepository } from './irepository';
 import { ObservableHelper } from '../helpers/observable.helper';
 
-class InMemoryRepository<TModel extends ModelBase> extends IRepository<TModel> {
+export class InMemoryRepository<
+  TModel extends ModelBase
+> extends IRepository<TModel> {
   protected models: TModel[];
 
   constructor() {
@@ -30,20 +32,20 @@ class InMemoryRepository<TModel extends ModelBase> extends IRepository<TModel> {
     return of(model);
   }
 
-  public override update(model: TModel): Observable<void> {
+  public override update(model: TModel): Observable<TModel> {
     const { index } = this.internalGet(model.id);
 
     this.models[index] = model;
 
-    return ObservableHelper.void();
+    return of(model);
   }
 
-  public override remove(model: TModel): Observable<void> {
+  public override remove(model: TModel): Observable<TModel> {
     const { index } = this.internalGet(model.id);
 
     this.models.splice(index, 1);
 
-    return ObservableHelper.void();
+    return of(model);
   }
 
   protected internalGet(id: number | undefined): {

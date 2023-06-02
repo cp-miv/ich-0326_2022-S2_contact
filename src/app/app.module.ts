@@ -22,6 +22,9 @@ import { DelayedRepository } from './repositories/delayed.repository';
 import { IService } from './services/iservice';
 import { ContactService } from './services/contact.service';
 import { LoaderComponent } from './components/loader/loader.component';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpRepository } from './repositories/http.repository';
+import { LoggedRepository } from './repositories/logged.repository';
 
 const storage: Storage = window.localStorage;
 
@@ -35,7 +38,7 @@ const storage: Storage = window.localStorage;
     ContactRemoveComponent,
     LoaderComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [
     {
       provide: IService<AddressEntity>,
@@ -56,18 +59,21 @@ const storage: Storage = window.localStorage;
     {
       provide: IRepository<AddressModel>,
       useFactory: () =>
-        new DelayedRepository<AddressModel>(
-          new BrowserStorageRepository<AddressModel>(storage, 'address'),
-          2000
-        ),
+        new BrowserStorageRepository<AddressModel>(storage, 'address'),
     },
     {
       provide: IRepository<ContactModel>,
-      useFactory: () =>
-        new DelayedRepository(
-          new BrowserStorageRepository<ContactModel>(storage, 'contact'),
-          2000
-        ),
+      useFactory: (http: HttpClient) => {
+        let repository: IRepository<ContactModel> | null = null;
+
+        repository = new HttpRepository(http, 'http://localhost:3000/contacts');
+        repository = new DelayedRepository(repository, 2000);
+        repository = new LoggedRepository(repository);
+
+        return repository!;
+      },
+
+      deps: [HttpClient],
     },
   ],
   bootstrap: [AppComponent],

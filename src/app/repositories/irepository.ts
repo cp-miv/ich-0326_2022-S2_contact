@@ -5,6 +5,6 @@ export abstract class IRepository<TModel extends ModelBase> {
   public abstract getAll(): Observable<TModel[]>;
   public abstract get(id: number): Observable<TModel>;
   public abstract add(model: TModel): Observable<TModel>;
-  public abstract update(model: TModel): Observable<void>;
-  public abstract remove(model: TModel): Observable<void>;
+  public abstract update(model: TModel): Observable<TModel>;
+  public abstract remove(model: TModel): Observable<TModel>;
 }
